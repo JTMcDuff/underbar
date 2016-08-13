@@ -304,12 +304,15 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-    cache = {};
-    var results;
+    var cache = {};
+    var result;
     return function(){
-
-    };
-    return results;
+      if(cache[arguments[0]] === undefined){
+        var result = func.apply(this, arguments);
+        cache[arguments[0]] = result;
+      }
+    return result;
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
