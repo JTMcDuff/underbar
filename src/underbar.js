@@ -202,14 +202,17 @@
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
     iterator = iterator || function(item){return item};
-    var bool = false;
+    /*var bool = false;
     _.each(collection, function(item){
       if(iterator(item)){
         bool = true;
         return;
       }
     })
-    return bool;
+    return bool;*/
+    return !_.every(collection, function(item){
+      return !iterator(item)
+    });
   };
 
 
