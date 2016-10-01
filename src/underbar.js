@@ -163,24 +163,12 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-    var result;
-    if (Array.isArray(collection)){
-      if (accumulator === undefined) {
-        result = collection[0];
-        for (var i = 1; i < collection.length; i ++) {
-          result = iterator(result,collection[i]);
-        }
-      } else {
-       result = accumulator;
-       for (var i = 0; i < collection.length; i ++) {
-        result = iterator(result,collection[i]);
-       } 
-      }
-    } else {
-      for (var key in collection) {}
-    }
-    return result;
-  };
+    _.each (collection, function(item){
+      if (accumulator === undefined) {accumulator = item;}
+      else {accumulator = iterator (accumulator,item);}
+    })
+    return accumulator;
+  };  
 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
@@ -195,17 +183,41 @@
   };
 
 
-  // Determine whether all of the elements match a truth test.
+  // Determine whether all of the elements match a truth test. Try using reduce.
   _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
+    iterator = iterator || _.identity;
+    if (collection.length === 0) {return true;}
+    return _.reduce(collection, function(total,item){
+      if (!total) { return false; }
+      if (item === undefined) { return false;}
+      if (iterator(item)) {return true;}
+      else {return false;}
+    },true)
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
-  // provided, provide a default one
+  // provided, provide a default one. TIP: There's a very clever way to re-use every() here.
   _.some = function(collection, iterator) {
-    // TIP: There's a very clever way to re-use every() here.
-  };
+    if (collection.length === 0) {return false;}
+    if(_.every(collection,iterator)) {
+      return true;
+    } else {
+      
+    }
 
+
+    // all true.  every returns true; some returns true.
+    // all false.  every returns false; some returns false.
+    // some of each. every returns false.  some should return true.
+  };
+ //passes by default for empty collection ‣ | fails for default
+ //passes for all-truthy  ‣ | passes for all truthy
+ //fails for a collection of all-falsy  ‣ | fails for all-false
+ //fails for  mixed ‣ | passes for mixed
+ //works for undefined values ‣
+ //should cast the result to a boolean ‣ same
+ //should handle callbacks that manipulate the input ‣ same
+ //should work when no callback is provided = same
 
   /**
    * OBJECTS
