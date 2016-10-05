@@ -198,12 +198,12 @@
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one. TIP: There's a very clever way to re-use every() here.
   _.some = function(collection, iterator) {
+    iterator = iterator || _.identity;
     if (collection.length === 0) {return false;}
-    if(_.every(collection,iterator)) {
-      return true;
-    } else {
-      
+    for (var i = 0; i < collection.length; i ++) {
+      if (iterator(collection[i])) {return true;}
     }
+    return false;
 
 
     // all true.  every returns true; some returns true.
@@ -238,13 +238,31 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    var source;
+    if (arguments.length === 1) {return obj;}
+    for ( var i = 1; i < arguments.length; i ++) {
+      source = arguments[i];
+      for (var key in source) {
+        obj[key] = source[key];
+      }
+    }
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    var source;
+    if (arguments.length === 1) {return obj;}
+    for ( var i = 1; i < arguments.length; i ++) {
+      source = arguments[i];
+      for (var key in source) {
+        if ( !(key in obj) ) {obj[key] = source[key];}
+      }
+    }
+    return obj;
   };
-
+  
 
   /**
    * FUNCTIONS
