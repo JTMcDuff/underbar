@@ -304,6 +304,12 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var memories = {};
+    var args = Array.prototype.slice.call(arguments,2);
+    //add all the args from the call to the object.
+    // if statement checks if current func exists in object
+    // if yes, return that reference
+    // else call the function with the arguments.
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -313,6 +319,9 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = Array.prototype.slice.call(arguments,2);
+    return setTimeout(function() {return func.apply(null,args)},wait);
+
   };
 
 
@@ -327,6 +336,18 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+  var copy = array.slice();
+  var result = [];
+  var rand;
+  while (copy.length != 0) {
+    var rand = getRandomInt(0,copy.length-1);
+    result.push(copy[rand]);
+    copy.splice(rand,1);
+  }
+   function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+  return result;
   };
 
 
