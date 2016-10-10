@@ -304,12 +304,19 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-    var memories = {};
-    var args = Array.prototype.slice.call(arguments,2);
-    //add all the args from the call to the object.
-    // if statement checks if current func exists in object
-    // if yes, return that reference
-    // else call the function with the arguments.
+    //memories is an object which holds the args of previous calls.
+    var memories = {}; 
+    return function(){
+    //args stores the arguments of the original function call to be compared.  
+    var args = Array.prototype.slice.call(arguments);
+    //if statement to return the existing function if it's been done, or to invoke the function normally.
+    if(args in memories){
+      return memories[args];     
+    }   
+    else{
+         return(memories[args]) = func.apply(this,args);
+       }
+     }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
